@@ -1,0 +1,35 @@
+{
+  "name": "dbosen/license-check",
+  "description": "License checker for required packages.",
+  "type": "composer-plugin",
+  "license": "GPL-2.0-or-later",
+  "keywords": ["license"],
+  "authors": [
+    {
+      "name": "Daniel Bosen",
+      "email": "daniel@bosen.eu"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "composer-plugin-api": "^1.1"
+  },
+  "require-dev": {
+    "composer/composer": "~1.6",
+    "phpunit/phpunit": "~8.5",
+    "squizlabs/php_codesniffer": "~3.5"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "phpcs src",
+    "fmt": "phpcbf src"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dbosen\\LicenseCheck\\": "src/"
+    }
+  },
+  "extra": {
+    "class": "Dbosen\\LicenseCheck\\Plugin"
+  }
+}

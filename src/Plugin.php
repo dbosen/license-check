@@ -8,6 +8,8 @@ use Composer\Plugin\PluginInterface;
 use Composer\Util\ProcessExecutor;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Composer plugin for testing licenses of required dependencies.
@@ -27,13 +29,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @var Composer
      */
     protected $composer;
-
-    /**
-     * The commandline process helper.
-     *
-     * @var ProcessExecutor
-     */
-    protected $process;
 
     /**
      * The accepted licences.
@@ -61,7 +56,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $this->io = $io;
         $this->composer = $composer;
-        $this->process = new ProcessExecutor($io);
     }
 
     /**
@@ -80,19 +74,19 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @param Event $event
      *   The event.
-     * 
+     *
      * @return void
      */
     public function postCmd(Event $event)
     {
         $notAcceptedDependencies = [];
-        $this->process->execute('composer licenses --format=json', $output);
-        $output = json_decode($output, true);
+        $repository = $this->composer->getRepositoryManager()->getLocalRepository();
+        $packages = $repository->getPackages();
 
-        foreach ($output['dependencies'] as $dependency => $info) {
-            foreach ($info['license'] as $license) {
+        foreach ($packages as $package) {
+            foreach ($package->getLicense() as $license) {
                 if (empty(self::$acceptedLicenses[$license])) {
-                    $notAcceptedDependencies[$dependency][] = $license;
+                    $notAcceptedDependencies[$package->getName()][] = $license;
                 }
             }
         }

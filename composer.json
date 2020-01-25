@@ -11,16 +11,14 @@
     }
   ],
   "require": {
-    "php": ">=7.2.0",
-    "composer-plugin-api": "^1.1"
+    "composer-plugin-api": "^1.0.0",
+    "php": ">=7.0.8"
   },
   "require-dev": {
-    "composer/composer": "~1.6",
-    "phpunit/phpunit": "~8.5",
+    "composer/composer": "^1.8@stable",
     "squizlabs/php_codesniffer": "~3.5"
   },
   "scripts": {
-    "test": "phpunit",
     "lint": "phpcs src",
     "fmt": "phpcbf src"
   },
